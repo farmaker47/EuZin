@@ -1,9 +1,11 @@
 package com.george.euzin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
@@ -30,6 +32,10 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
     private EuZinMainGridDbHelper dbHelper;
     private static final int MAIN_LOADER = 47;
     private MainActivity mMain;
+    private ObservableActivity mObservableActivity;
+    private Cursor mCursorAfterClick;
+    public static final String NUMBER_OF_LIST = "listNumber";
+    private static final String TABLE_TO_PASS = "table_pass";
 
     private int numberOfIncoming;
 
@@ -41,9 +47,9 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        if(intent.hasExtra(mMain.NUMBER_OF_GRID)){
-        numberOfIncoming= intent.getIntExtra(mMain.NUMBER_OF_GRID,0);
-            Log.e("DetailActivity",String.valueOf(numberOfIncoming));
+        if (intent.hasExtra(mMain.NUMBER_OF_GRID)) {
+            numberOfIncoming = intent.getIntExtra(mMain.NUMBER_OF_GRID, 0);
+            Log.e("DetailActivity", String.valueOf(numberOfIncoming));
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -72,10 +78,12 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         //Setting the adapter
-        mEuZinAdapter = new EuZinDetailAdapter(this,this);
+        mEuZinAdapter = new EuZinDetailAdapter(this, this);
         mRecyclerView.setAdapter(mEuZinAdapter);
 
         getSupportLoaderManager().initLoader(MAIN_LOADER, null, this);
+
+        mObservableActivity = new ObservableActivity();
     }
 
     @Override
@@ -97,7 +105,7 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
             @Override
             public Cursor loadInBackground() {
 
-                if(numberOfIncoming==2){
+                if (numberOfIncoming == 2) {
                     try {
                         Cursor mCursor = mDb.query(EuZinContract.DetailView.TABLE_NAME_SUNSCREEN,
                                 null,
@@ -106,12 +114,21 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
                                 null,
                                 null,
                                 null);
+
+                        Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);
+
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(TABLE_TO_PASS,EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);
+                        editor.apply();
+
                         return mCursor;
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         return null;
                     }
-                }else if(numberOfIncoming==1){
+                } else if (numberOfIncoming == 1) {
                     try {
                         Cursor mCursor = mDb.query(EuZinContract.DetailView.TABLE_NAME_VITAMIN,
                                 null,
@@ -120,12 +137,19 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
                                 null,
                                 null,
                                 null);
+                        Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_VITAMIN);
+
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(TABLE_TO_PASS,EuZinContract.DetailView.TABLE_NAME_VITAMIN);
+                        editor.apply();
+
                         return mCursor;
                     } catch (Exception e) {
                         e.printStackTrace();
                         return null;
                     }
-                }else{
+                } else {
                     return null;
                 }
 
@@ -153,6 +177,10 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
 
     @Override
     public void onListItemClick(int itemIndex) {
+
+        Intent intent = new Intent(SunScreen.this, ObservableActivity.class);
+        intent.putExtra(NUMBER_OF_LIST, itemIndex);
+        startActivity(intent);
 
     }
 }

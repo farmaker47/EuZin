@@ -213,10 +213,5 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(NUMBER_OF_GRID,itemIndex);
         startActivity(intent);
 
-        /*switch (itemIndex){
-            case 2:
-
-                break;
-        }*/
     }
 }
