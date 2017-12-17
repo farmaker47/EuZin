@@ -22,7 +22,8 @@ public class EuZinContract {
 
     public static final class DetailView implements BaseColumns{
 
-        public static final String TABLE_NAME = "detailTable";
+        public static final String TABLE_NAME_SUNSCREEN = "detailTable";
+        public static final String TABLE_NAME_VITAMIN = "vitaminDetailTable";
 
         public  static final String DETAIL_VIEW_IMAGE = "imageGeneral";
         public  static final String DETAIL_VIEW_TITLE_TEXT = "greekTitle";

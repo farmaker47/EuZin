@@ -1,5 +1,6 @@
 package com.george.euzin;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.george.euzin.data.EuZinContract;
@@ -27,6 +29,9 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
     private SQLiteDatabase mDb;
     private EuZinMainGridDbHelper dbHelper;
     private static final int MAIN_LOADER = 47;
+    private MainActivity mMain;
+
+    private int numberOfIncoming;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,12 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
         setContentView(R.layout.activity_sun_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent = getIntent();
+        if(intent.hasExtra(mMain.NUMBER_OF_GRID)){
+        numberOfIncoming= intent.getIntExtra(mMain.NUMBER_OF_GRID,0);
+            Log.e("DetailActivity",String.valueOf(numberOfIncoming));
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -85,19 +96,39 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
 
             @Override
             public Cursor loadInBackground() {
-                try {
-                    Cursor mCursor = mDb.query(EuZinContract.DetailView.TABLE_NAME,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null);
-                    return mCursor;
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                if(numberOfIncoming==2){
+                    try {
+                        Cursor mCursor = mDb.query(EuZinContract.DetailView.TABLE_NAME_SUNSCREEN,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null);
+                        return mCursor;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }else if(numberOfIncoming==1){
+                    try {
+                        Cursor mCursor = mDb.query(EuZinContract.DetailView.TABLE_NAME_VITAMIN,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null);
+                        return mCursor;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }else{
                     return null;
                 }
+
             }
 
             @Override

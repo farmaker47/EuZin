@@ -42,7 +42,16 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
                         EuZinContract.MainGrid.GRID_IMAGE + " BLOB " +
                         ");";
         String DATABASE_CREATE_DETAIL =
-                "CREATE TABLE IF NOT EXISTS " + EuZinContract.DetailView.TABLE_NAME + "(" +
+                "CREATE TABLE IF NOT EXISTS " + EuZinContract.DetailView.TABLE_NAME_SUNSCREEN + "(" +
+                        EuZinContract.DetailView._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_TITLE_TEXT + " TEXT NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_TITLE_ENGLISH + " TEXT NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_TEXT + " TEXT NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_ENGLISH + " TEXT NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_IMAGE + " BLOB " +
+                        ");";
+        String DATABASE_CREATE_VITAMIN =
+                "CREATE TABLE IF NOT EXISTS " + EuZinContract.DetailView.TABLE_NAME_VITAMIN + "(" +
                         EuZinContract.DetailView._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         EuZinContract.DetailView.DETAIL_VIEW_TITLE_TEXT + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_TITLE_ENGLISH + " TEXT NOT NULL, " +
@@ -53,13 +62,15 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL(DATABASE_CREATE_MAIN);
         sqLiteDatabase.execSQL(DATABASE_CREATE_DETAIL);
+        sqLiteDatabase.execSQL(DATABASE_CREATE_VITAMIN);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + EuZinContract.MainGrid.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + EuZinContract.DetailView.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + EuZinContract.DetailView.TABLE_NAME_VITAMIN);
         onCreate(sqLiteDatabase);
     }
 

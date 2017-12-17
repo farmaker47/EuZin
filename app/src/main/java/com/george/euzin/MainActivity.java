@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     private SQLiteDatabase mDb;
     private EuZinMainGridDbHelper dbHelper;
     private static final int MAIN_LOADER = 23;
+    public static final String NUMBER_OF_GRID = "number";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,11 +209,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListItemClick(int itemIndex) {
 
-        switch (itemIndex){
+        Intent intent = new Intent(MainActivity.this, SunScreen.class);
+        intent.putExtra(NUMBER_OF_GRID,itemIndex);
+        startActivity(intent);
+
+        /*switch (itemIndex){
             case 2:
-                Intent intent = new Intent(MainActivity.this, SunScreen.class);
-                startActivity(intent);
+
                 break;
-        }
+        }*/
     }
 }
