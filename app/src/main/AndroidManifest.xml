@@ -22,7 +22,8 @@
             android:name=".SunScreen"
             android:label="@string/title_activity_sun_screen"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ObservableActivity"></activity>
+        <activity android:name=".ObservableActivity"
+            android:theme="@style/AppTheme.Toolbar"></activity>
     </application>
 
 </manifest>
