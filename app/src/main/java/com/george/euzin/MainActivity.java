@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,11 +22,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.george.euzin.data.EuZinContract;
 import com.george.euzin.data.EuZinMainGridDbHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -38,6 +46,115 @@ public class MainActivity extends AppCompatActivity
     private EuZinMainGridDbHelper dbHelper;
     private static final int MAIN_LOADER = 23;
     public static final String NUMBER_OF_GRID = "number";
+
+    private static final int DATABASE_LOADER = 42;
+    private static final String URL_TO_DOWNLOAD = "https://firebasestorage.googleapis.com/v0/b/recipee-f995c.appspot.com/o/chat_photos%2FmainGrid.db?alt=media&token=8e6cd389-c1dc-4542-bf59-1dd91887b226";
+    private static final String URL_KEY = "urlKey";
+
+    private android.support.v4.app.LoaderManager.LoaderCallbacks mLoaderCallBackString = new LoaderManager.LoaderCallbacks() {
+        @Override
+        public Loader onCreateLoader(int id, final Bundle args) {
+            return new AsyncTaskLoader<String>(MainActivity.this) {
+
+                @Override
+                protected void onStartLoading() {
+                    if (args == null) {
+                        return;
+                    }
+
+                    forceLoad();
+                }
+
+                @Override
+                public String loadInBackground() {
+
+                    String urlToUse = args.getString(URL_KEY);
+
+                    InputStream input = null;
+                    OutputStream output = null;
+                    HttpURLConnection connection = null;
+
+                    /*String path = Environment.getExternalStorageDirectory()
+                            .getAbsolutePath() + "/Recipe-DB";*/
+                    String path = EuZinContract.MainGrid.DB_PATH;
+
+                    File dir = new File(path);
+                    if (!dir.exists())
+                        dir.mkdirs();
+
+                    try {
+                        URL url = new URL(urlToUse);
+                        connection = (HttpURLConnection) url.openConnection();
+                        connection.connect();
+
+                        // expect HTTP 200 OK, so we don't mistakenly save error report
+                        // instead of the file
+                        if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                            return "Server returned HTTP " + connection.getResponseCode()
+                                    + " " + connection.getResponseMessage();
+                        }
+
+                        // this will be useful to display download percentage
+                        // might be -1: server did not report the length
+                        int fileLength = connection.getContentLength();
+
+                        // download the file
+                        input = connection.getInputStream();
+
+                        File fToPut = new File(dir, "mainGrid.db");
+                        /// set Append to false if you want to overwrite
+                        output = new FileOutputStream(fToPut,false);
+
+                        byte data[] = new byte[4096];
+                        long total = 0;
+                        int count;
+                        while ((count = input.read(data)) != -1) {
+                            // allow canceling with back button
+                        /*if (isCancelled()) {
+                            input.close();
+                            return null;
+                        }*/
+                            total += count;
+                            // publishing the progress....
+                        /*if (fileLength > 0) // only if total length is known
+                            publishProgress((int) (total * 100 / fileLength));*/
+                            output.write(data, 0, count);
+                        }
+                    } catch (Exception e) {
+                        return e.toString();
+                    } finally {
+                        try {
+                            if (output != null)
+                                output.close();
+                            if (input != null)
+                                input.close();
+                        } catch (IOException ignored) {
+                        }
+
+                        if (connection != null)
+                            connection.disconnect();
+                    }
+                    return null;
+                }
+            };
+        }
+
+        @Override
+        public void onLoadFinished(Loader loader, Object data) {
+            Toast.makeText(MainActivity.this,"Success",Toast.LENGTH_LONG).show();
+
+            mEuZinAdapter.setCursorData(null);
+
+            getSupportLoaderManager().restartLoader(MAIN_LOADER, null, this);
+        }
+
+        @Override
+        public void onLoaderReset(Loader loader) {
+
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +210,7 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setAdapter(mEuZinAdapter);
 
         getSupportLoaderManager().initLoader(MAIN_LOADER, null, this);
+        getSupportLoaderManager().initLoader(DATABASE_LOADER, null, mLoaderCallBackString);
     }
 
     @Override
@@ -123,6 +241,12 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+
+        if (id == R.id.action_freshDB) {
+            downloadFromFirebase();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -212,6 +336,22 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(MainActivity.this, SunScreen.class);
         intent.putExtra(NUMBER_OF_GRID,itemIndex);
         startActivity(intent);
+
+    }
+
+    private void downloadFromFirebase() {
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(URL_KEY, URL_TO_DOWNLOAD);
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        // COMPLETED (22) Get our Loader by calling getLoader and passing the ID we specified
+        Loader<String> githubSearchLoader = loaderManager.getLoader(DATABASE_LOADER);
+        // COMPLETED (23) If the Loader was null, initialize it. Else, restart it.
+        if (githubSearchLoader == null) {
+            loaderManager.initLoader(DATABASE_LOADER, queryBundle, mLoaderCallBackString);
+        } else {
+            loaderManager.restartLoader(DATABASE_LOADER, queryBundle, mLoaderCallBackString);
+        }
 
     }
 }
