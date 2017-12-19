@@ -1,5 +1,6 @@
 package com.george.euzin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -19,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import com.george.euzin.data.EuZinContract;
 import com.george.euzin.data.EuZinMainGridDbHelper;
+import com.george.euzin.hilfe.EuZinService;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,8 +51,8 @@ public class MainActivity extends AppCompatActivity
     public static final String NUMBER_OF_GRID = "number";
 
     private static final int DATABASE_LOADER = 42;
-    private static final String URL_TO_DOWNLOAD = "https://firebasestorage.googleapis.com/v0/b/recipee-f995c.appspot.com/o/chat_photos%2FmainGrid.db?alt=media&token=8e6cd389-c1dc-4542-bf59-1dd91887b226";
-    private static final String URL_KEY = "urlKey";
+    private static final String URL_TO_DOWNLOAD = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/rrecip.jpg?alt=media&token=e093fbe1-a4c9-4f7b-b6fa-eb262221607d";
+    public static final String URL_KEY = "urlKey";
 
     private android.support.v4.app.LoaderManager.LoaderCallbacks mLoaderCallBackString = new LoaderManager.LoaderCallbacks() {
         @Override
@@ -74,9 +77,9 @@ public class MainActivity extends AppCompatActivity
                     OutputStream output = null;
                     HttpURLConnection connection = null;
 
-                    /*String path = Environment.getExternalStorageDirectory()
-                            .getAbsolutePath() + "/Recipe-DB";*/
-                    String path = EuZinContract.MainGrid.DB_PATH;
+                    String path = Environment.getExternalStorageDirectory()
+                            .getAbsolutePath() + "/Recipe-DB";
+                    /*String path = EuZinContract.MainGrid.DB_PATH;*/
 
                     File dir = new File(path);
                     if (!dir.exists())
@@ -101,7 +104,9 @@ public class MainActivity extends AppCompatActivity
                         // download the file
                         input = connection.getInputStream();
 
-                        File fToPut = new File(dir, "mainGrid.db");
+                        /*File fToPut = new File(dir, "mainGrid.db");*/
+                        File fToPut = new File(dir, "2.jpeg");
+
                         /// set Append to false if you want to overwrite
                         output = new FileOutputStream(fToPut,false);
 
@@ -143,9 +148,6 @@ public class MainActivity extends AppCompatActivity
         public void onLoadFinished(Loader loader, Object data) {
             Toast.makeText(MainActivity.this,"Success",Toast.LENGTH_LONG).show();
 
-            mEuZinAdapter.setCursorData(null);
-
-            getSupportLoaderManager().restartLoader(MAIN_LOADER, null, this);
         }
 
         @Override
@@ -244,6 +246,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.action_freshDB) {
             downloadFromFirebase();
+            return true;
+        }
+
+        if (id == R.id.action_freshServiceDB) {
+            Intent intent = new Intent(this, EuZinService.class);
+            startService(intent);
             return true;
         }
 
@@ -353,5 +361,18 @@ public class MainActivity extends AppCompatActivity
             loaderManager.restartLoader(DATABASE_LOADER, queryBundle, mLoaderCallBackString);
         }
 
+    }
+
+    public void restartTheLorder(){
+        LoaderManager loaderManager = getSupportLoaderManager();
+        // COMPLETED (22) Get our Loader by calling getLoader and passing the ID we specified
+        Loader<Cursor> looader = loaderManager.getLoader(MAIN_LOADER);
+        // COMPLETED (23) If the Loader was null, initialize it. Else, restart it.
+        if (looader == null) {
+            loaderManager.initLoader(MAIN_LOADER, null, this);
+        } else {
+            loaderManager.restartLoader(MAIN_LOADER, null, this);
+        }
+        Log.e("MainLoader","Restarted");
     }
 }

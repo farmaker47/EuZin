@@ -6,6 +6,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_Fresh_Database">Fresh Database</string>
+    <string name="action_Fresh_Database_Service">Fresh Service DB</string>
     <string name="main_TextView_Title">Products</string>
     <string name="title_activity_sun_screen">SunScreen</string>
     <string name="lipsum">Μια φορά κι έναν καιρό, σ’ ένα φανταστικό βασίλειο, με ευγενείς, χωρικούς, ιππότες, μάγους, καλούς και κακούς, ζούσε ένας βασιλιάς αγαπητός στον λαό, που εκδιώχθηκε με δόλιο τρόπο από τον θρόνο του…
