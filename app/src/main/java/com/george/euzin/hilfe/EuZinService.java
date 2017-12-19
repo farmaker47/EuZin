@@ -1,6 +1,7 @@
 package com.george.euzin.hilfe;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -18,6 +19,7 @@ import java.net.URL;
 
 public class EuZinService extends IntentService {
 
+
     private EuZinDownloadFunction mEuZinDownload=new EuZinDownloadFunction();
 
 
@@ -27,6 +29,6 @@ public class EuZinService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        mEuZinDownload.downloadFromInternet();
+        mEuZinDownload.downloadFromInternet(this);
     }
 }

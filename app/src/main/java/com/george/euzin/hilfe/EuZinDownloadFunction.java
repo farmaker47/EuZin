@@ -1,6 +1,7 @@
 package com.george.euzin.hilfe;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.george.euzin.MainActivity;
@@ -20,10 +21,9 @@ import java.net.URL;
 
 public class EuZinDownloadFunction {
 
-    private Context context;
-    private MainActivity mMainA=new MainActivity();
+    private static final String NUMBER_OF_RECEIVER = "updating";
 
-    public void downloadFromInternet(){
+    public void downloadFromInternet(Context context){
         String urlToUse = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/mainGrid.db?alt=media&token=68288ff7-523e-4bda-87bd-e2e73d7e491d";
 
         InputStream input = null;
@@ -93,6 +93,10 @@ public class EuZinDownloadFunction {
                 connection.disconnect();
         }
         Log.e("DEMO","yew");
-        mMainA.restartTheLorder();
+
+        Intent intent = new Intent();
+        intent.setAction(NUMBER_OF_RECEIVER);
+        context.sendBroadcast(intent);
+
     }
 }

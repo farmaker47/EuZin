@@ -1,7 +1,9 @@
 package com.george.euzin;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -40,7 +42,7 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        LoaderManager.LoaderCallbacks<Cursor>, EuZinMainAdapter.euZinClickItemListener{
+        LoaderManager.LoaderCallbacks<Cursor>, EuZinMainAdapter.euZinClickItemListener {
 
     private RecyclerView mRecyclerView;
     private EuZinMainAdapter mEuZinAdapter;
@@ -49,10 +51,14 @@ public class MainActivity extends AppCompatActivity
     private EuZinMainGridDbHelper dbHelper;
     private static final int MAIN_LOADER = 23;
     public static final String NUMBER_OF_GRID = "number";
+    private static final String NUMBER_OF_RECEIVER = "updating";
 
     private static final int DATABASE_LOADER = 42;
     private static final String URL_TO_DOWNLOAD = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/rrecip.jpg?alt=media&token=e093fbe1-a4c9-4f7b-b6fa-eb262221607d";
     public static final String URL_KEY = "urlKey";
+
+    private BroadcastReceiver mBroadcastReceiver;
+    private IntentFilter mFilter;
 
     private android.support.v4.app.LoaderManager.LoaderCallbacks mLoaderCallBackString = new LoaderManager.LoaderCallbacks() {
         @Override
@@ -108,7 +114,7 @@ public class MainActivity extends AppCompatActivity
                         File fToPut = new File(dir, "2.jpeg");
 
                         /// set Append to false if you want to overwrite
-                        output = new FileOutputStream(fToPut,false);
+                        output = new FileOutputStream(fToPut, false);
 
                         byte data[] = new byte[4096];
                         long total = 0;
@@ -146,7 +152,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onLoadFinished(Loader loader, Object data) {
-            Toast.makeText(MainActivity.this,"Success",Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_LONG).show();
 
         }
 
@@ -155,7 +161,6 @@ public class MainActivity extends AppCompatActivity
 
         }
     };
-
 
 
     @Override
@@ -199,20 +204,36 @@ public class MainActivity extends AppCompatActivity
 
         //setting Context and column number for grid
         mGridLayoutManager = new GridLayoutManager(this, 2);
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mGridLayoutManager = new GridLayoutManager(this, 2);
-        }
-        else{
+        } else {
             mGridLayoutManager = new GridLayoutManager(this, 3);
         }
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
         //Setting the adapter
-        mEuZinAdapter = new EuZinMainAdapter(this,this);
+        mEuZinAdapter = new EuZinMainAdapter(this, this);
         mRecyclerView.setAdapter(mEuZinAdapter);
 
         getSupportLoaderManager().initLoader(MAIN_LOADER, null, this);
         getSupportLoaderManager().initLoader(DATABASE_LOADER, null, mLoaderCallBackString);
+
+        mBroadcastReceiver = new EuZinBroadcast();
+        mFilter = new IntentFilter();
+        mFilter.addAction(NUMBER_OF_RECEIVER);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(mBroadcastReceiver, mFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -342,7 +363,7 @@ public class MainActivity extends AppCompatActivity
     public void onListItemClick(int itemIndex) {
 
         Intent intent = new Intent(MainActivity.this, SunScreen.class);
-        intent.putExtra(NUMBER_OF_GRID,itemIndex);
+        intent.putExtra(NUMBER_OF_GRID, itemIndex);
         startActivity(intent);
 
     }
@@ -363,16 +384,15 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void restartTheLorder(){
-        LoaderManager loaderManager = getSupportLoaderManager();
-        // COMPLETED (22) Get our Loader by calling getLoader and passing the ID we specified
-        Loader<Cursor> looader = loaderManager.getLoader(MAIN_LOADER);
-        // COMPLETED (23) If the Loader was null, initialize it. Else, restart it.
-        if (looader == null) {
-            loaderManager.initLoader(MAIN_LOADER, null, this);
-        } else {
-            loaderManager.restartLoader(MAIN_LOADER, null, this);
+    public class EuZinBroadcast extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(NUMBER_OF_RECEIVER)) {
+                getSupportLoaderManager().restartLoader(MAIN_LOADER, null, MainActivity.this);
+                Log.e("MainBroadcast", "Restarted");
+            }
         }
-        Log.e("MainLoader","Restarted");
     }
 }

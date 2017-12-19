@@ -26,13 +26,17 @@
             android:name=".SunScreen"
             android:label="@string/title_activity_sun_screen"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ObservableActivity"
+        <activity
+            android:name=".ObservableActivity"
             android:theme="@style/AppTheme.Toolbar"></activity>
 
-        <service android:name=".hilfe.EuZinService"
+        <service
+            android:name=".hilfe.EuZinService"
             android:exported="false">
 
         </service>
+
+
     </application>
 
 </manifest>
