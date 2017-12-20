@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.george.euzin.data.EuZinContract;
 import com.george.euzin.data.EuZinMainGridDbHelper;
+import com.george.euzin.hilfe.EuZinJobDispatcher;
 import com.george.euzin.hilfe.EuZinService;
 
 import java.io.File;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private static final int MAIN_LOADER = 23;
     public static final String NUMBER_OF_GRID = "number";
     private static final String NUMBER_OF_RECEIVER = "updating";
+    private static final String DOWNLOAD_OF_RECEIVER = "downloading";
 
     private static final int DATABASE_LOADER = 42;
     private static final String URL_TO_DOWNLOAD = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/rrecip.jpg?alt=media&token=e093fbe1-a4c9-4f7b-b6fa-eb262221607d";
@@ -221,6 +223,9 @@ public class MainActivity extends AppCompatActivity
         mBroadcastReceiver = new EuZinBroadcast();
         mFilter = new IntentFilter();
         mFilter.addAction(NUMBER_OF_RECEIVER);
+        mFilter.addAction(DOWNLOAD_OF_RECEIVER);
+
+        EuZinJobDispatcher.scheduleFirebaseJobDispatcherSync(this);
 
     }
 
@@ -392,6 +397,9 @@ public class MainActivity extends AppCompatActivity
             if (action.equals(NUMBER_OF_RECEIVER)) {
                 getSupportLoaderManager().restartLoader(MAIN_LOADER, null, MainActivity.this);
                 Log.e("MainBroadcast", "Restarted");
+            }else if(action.equals(DOWNLOAD_OF_RECEIVER)){
+                downloadFromFirebase();
+                Log.e("MainBroadcast", "Picture Downoaded");
             }
         }
     }

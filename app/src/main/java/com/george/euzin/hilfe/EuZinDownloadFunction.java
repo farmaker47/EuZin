@@ -22,6 +22,7 @@ import java.net.URL;
 public class EuZinDownloadFunction {
 
     private static final String NUMBER_OF_RECEIVER = "updating";
+    private static final String DOWNLOAD_OF_RECEIVER = "downloading";
 
     public void downloadFromInternet(Context context){
         String urlToUse = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/mainGrid.db?alt=media&token=68288ff7-523e-4bda-87bd-e2e73d7e491d";
@@ -98,5 +99,11 @@ public class EuZinDownloadFunction {
         intent.setAction(NUMBER_OF_RECEIVER);
         context.sendBroadcast(intent);
 
+    }
+
+    public void sendIntentToDownloadPicture(Context context){
+        Intent intent = new Intent();
+        intent.setAction(DOWNLOAD_OF_RECEIVER);
+        context.sendBroadcast(intent);
     }
 }
