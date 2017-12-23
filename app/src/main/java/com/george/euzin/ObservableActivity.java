@@ -303,8 +303,8 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         ContentValues cv = new ContentValues();
         cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,1);
-        mDb.update(tableToQuery,cv,"_id = ?", new String[]{String.valueOf(number)});
-        /*mDb.update(tableToQuery,cv,"_id=" + number,null);*/
+        //use number+1 to get the correct row in DB
+        mDb.update(tableToQuery,cv,"_id = ?", new String[]{String.valueOf(number+1)});
         Log.e("FullUpdate",tableToQuery+"-"+ number);
     }
 
@@ -312,8 +312,8 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         ContentValues cv = new ContentValues();
         cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,0);
-        mDb.update(tableToQuery,cv,"_id = ?", new String[]{String.valueOf(number)});
-        /*mDb.update(tableToQuery,cv,"_id=" + number,null);*/
+        //use number+1 to get the correct row in DB
+        mDb.update(tableToQuery,cv,"_id = ?", new String[]{String.valueOf(number+1)});
         Log.e("EmptyUpdate",tableToQuery+"-"+ number);
     }
 }
