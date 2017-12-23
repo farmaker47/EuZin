@@ -1,5 +1,6 @@
 package com.george.euzin;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -123,11 +124,19 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
                     case R.drawable.heart_in:
                         imageView.setImageResource(R.drawable.heart_out);
                         imageView.setTag(R.drawable.heart_out);
+
+                        makeHeartEmpty();
+                        Log.e("OnClick","Out");
+
                         break;
                     case R.drawable.heart_out:
                     default:
                         imageView.setImageResource(R.drawable.heart_in);
                         imageView.setTag(R.drawable.heart_in);
+
+                        makeHeartFull();
+                        Log.e("OnClick","In");
+
                         break;
                 }
             }
@@ -140,7 +149,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             e.printStackTrace();
         }
 
-        mDb = dbHelper.getReadableDatabase();
+        mDb = dbHelper.getWritableDatabase();
 
         getSupportLoaderManager().initLoader(MAIN_LOADER,null,this);
 
@@ -199,6 +208,14 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         Bitmap bitmap = getImage(image);
         imageO.setImageBitmap(bitmap);
 
+        int heartNumber = data.getInt(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_HEART));
+        if(heartNumber==0){
+            fab.setImageResource(R.drawable.heart_out);
+            Log.e("HeartOut","Done");
+        }else if(heartNumber==1){
+            fab.setImageResource(R.drawable.heart_in);
+            Log.e("HeartIn","DoneDoneeeeee");
+        }
     }
 
     @Override
@@ -280,5 +297,23 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             ViewPropertyAnimator.animate(fab).scaleX(0).scaleY(0).setDuration(200).start();
             mFabIsShown = false;
         }
+    }
+
+    private void makeHeartFull(){
+
+        ContentValues cv = new ContentValues();
+        cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,1);
+        mDb.update(tableToQuery,cv,"_id = ?", new String[]{String.valueOf(number)});
+        /*mDb.update(tableToQuery,cv,"_id=" + number,null);*/
+        Log.e("FullUpdate",tableToQuery+"-"+ number);
+    }
+
+    private void makeHeartEmpty(){
+
+        ContentValues cv = new ContentValues();
+        cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,0);
+        mDb.update(tableToQuery,cv,"_id = ?", new String[]{String.valueOf(number)});
+        /*mDb.update(tableToQuery,cv,"_id=" + number,null);*/
+        Log.e("EmptyUpdate",tableToQuery+"-"+ number);
     }
 }

@@ -1,5 +1,8 @@
 package com.george.euzin;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,13 +10,18 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -34,6 +42,8 @@ import com.george.euzin.hilfe.EuZinJobDispatcher;
 import com.george.euzin.hilfe.EuZinService;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,6 +64,7 @@ public class MainActivity extends AppCompatActivity
     public static final String NUMBER_OF_GRID = "number";
     private static final String NUMBER_OF_RECEIVER = "updating";
     private static final String DOWNLOAD_OF_RECEIVER = "downloading";
+    private static final int NOTIFICATION_ID = 4000;
 
     private static final int DATABASE_LOADER = 42;
     private static final String URL_TO_DOWNLOAD = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/rrecip.jpg?alt=media&token=e093fbe1-a4c9-4f7b-b6fa-eb262221607d";
@@ -155,6 +166,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onLoadFinished(Loader loader, Object data) {
             Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_LONG).show();
+            EuZinNotification();
 
         }
 
@@ -198,7 +210,7 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        mDb = dbHelper.getReadableDatabase();
+        mDb = dbHelper.getWritableDatabase();
 
         //RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.mainRecyclerView);
@@ -402,5 +414,39 @@ public class MainActivity extends AppCompatActivity
                 Log.e("MainBroadcast", "Picture Downoaded");
             }
         }
+    }
+
+    private void EuZinNotification(){
+
+        /*Bitmap largeIcon = BitmapFactory.decodeResource(
+                getResources(),R.drawable.heart_out);*/
+
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/2.jpeg";
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(path,options); //This gets the image
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setColor(ContextCompat.getColor(this,R.color.colorPrimary))
+                .setLargeIcon(bitmap)
+                .setSmallIcon(R.drawable.heart_in)
+                .setContentTitle("Notification")
+                .setContentText("Download completed")
+                .setAutoCancel(true);
+
+        Intent detailIntentForToday = new Intent(this, MainActivity.class);
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+        taskStackBuilder.addNextIntentWithParentStack(detailIntentForToday);
+        PendingIntent resultPendingIntent = taskStackBuilder
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager)
+                getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
+
     }
 }

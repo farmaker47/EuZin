@@ -48,6 +48,7 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
                         EuZinContract.DetailView.DETAIL_VIEW_TITLE_ENGLISH + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_TEXT + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_ENGLISH + " TEXT NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_HEART + " INTEGER NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_IMAGE + " BLOB " +
                         ");";
         String DATABASE_CREATE_VITAMIN =
@@ -57,6 +58,7 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
                         EuZinContract.DetailView.DETAIL_VIEW_TITLE_ENGLISH + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_TEXT + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_ENGLISH + " TEXT NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_HEART + " INTEGER NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_IMAGE + " BLOB " +
                         ");";
 
@@ -99,7 +101,7 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
         if (dbexist) {
             System.out.println(" Database exists.");
         } else {
-            this.getReadableDatabase();
+            this.getWritableDatabase();
             try {
                 copydatabase();
             } catch (IOException e) {

@@ -68,7 +68,7 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
             e.printStackTrace();
         }
 
-        mDb = dbHelper.getReadableDatabase();
+        mDb = dbHelper.getWritableDatabase();
 
         //RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.detailRecyclerView);
