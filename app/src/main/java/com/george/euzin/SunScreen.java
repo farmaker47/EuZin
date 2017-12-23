@@ -107,7 +107,7 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
 
                 if (numberOfIncoming == 2) {
                     try {
-                        Cursor mCursor = mDb.query(EuZinContract.DetailView.TABLE_NAME_SUNSCREEN,
+                        /*Cursor mCursor = mDb.query(EuZinContract.DetailView.TABLE_NAME_SUNSCREEN,
                                 null,
                                 null,
                                 null,
@@ -115,14 +115,19 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
                                 null,
                                 null);
 
-                        Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);
+                        Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);*/
 
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(TABLE_TO_PASS,EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);
                         editor.apply();
 
-                        return mCursor;
+                        try {
+                            return getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN,null,null,null,null);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return null;
+                        }
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -130,21 +135,26 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
                     }
                 } else if (numberOfIncoming == 1) {
                     try {
-                        Cursor mCursor = mDb.query(EuZinContract.DetailView.TABLE_NAME_VITAMIN,
+                        /*Cursor mCursor = mDb.query(EuZinContract.DetailView.TABLE_NAME_VITAMIN,
                                 null,
                                 null,
                                 null,
                                 null,
                                 null,
                                 null);
-                        Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_VITAMIN);
+                        Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_VITAMIN);*/
 
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(TABLE_TO_PASS,EuZinContract.DetailView.TABLE_NAME_VITAMIN);
                         editor.apply();
 
-                        return mCursor;
+                        try {
+                            return getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_VITAMIN,null,null,null,null);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return null;
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         return null;

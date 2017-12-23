@@ -177,14 +177,21 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             @Override
             public Cursor loadInBackground() {
                 try {
-                    Cursor mCursor = mDb.query(tableToQuery,
+                    /*Cursor mCursor = mDb.query(tableToQuery,
                             null,
                             null,
                             null,
                             null,
                             null,
                             null);
-                    return mCursor;
+                    return mCursor;*/
+
+                    try {
+                        return getContentResolver().query(EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).build(),null,null,null,null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
@@ -218,8 +225,11 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             Log.e("HeartIn","DoneDoneeeeee");
         }
 
+        //getting the row id for use in Update function
         int rowId = data.getInt(data.getColumnIndex(EuZinContract.DetailView._ID));
         rowForHeart = String.valueOf(rowId);
+
+        data.close();
     }
 
     @Override
@@ -307,15 +317,19 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         ContentValues cv = new ContentValues();
         cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,1);
-        mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});
-        Log.e("FullUpdate",tableToQuery+"-"+ number);
+
+        getContentResolver().update(EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).appendPath(rowForHeart).build(),cv,null,null);
+
+        /*mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});*/
+        Log.e("FullUpdate",tableToQuery+"-"+ rowForHeart);
     }
 
     private void makeHeartEmpty(){
 
         ContentValues cv = new ContentValues();
         cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,0);
-        mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});
-        Log.e("EmptyUpdate",tableToQuery+"-"+ number);
+        getContentResolver().update(EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).appendPath(rowForHeart).build(),cv,null,null);
+        /*mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});*/
+        Log.e("EmptyUpdate",tableToQuery+"-"+ rowForHeart);
     }
 }

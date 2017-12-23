@@ -341,7 +341,14 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public Cursor loadInBackground() {
+
                 try {
+                    return getContentResolver().query(EuZinContract.MainGrid.CONTENT_URI_MAIN,null,null,null,null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+                /*try {
                     Cursor mCursor = mDb.query(EuZinContract.MainGrid.TABLE_NAME,
                             null,
                             null,
@@ -353,7 +360,7 @@ public class MainActivity extends AppCompatActivity
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
-                }
+                }*/
             }
 
             @Override
