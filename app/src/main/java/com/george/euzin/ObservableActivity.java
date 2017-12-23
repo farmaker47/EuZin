@@ -51,6 +51,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private SQLiteDatabase mDb;
     private EuZinMainGridDbHelper dbHelper;
+    private String rowForHeart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,6 +217,9 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             fab.setImageResource(R.drawable.heart_in);
             Log.e("HeartIn","DoneDoneeeeee");
         }
+
+        int rowId = data.getInt(data.getColumnIndex(EuZinContract.DetailView._ID));
+        rowForHeart = String.valueOf(rowId);
     }
 
     @Override
@@ -303,8 +307,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         ContentValues cv = new ContentValues();
         cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,1);
-        //use number+1 to get the correct row in DB
-        mDb.update(tableToQuery,cv,"_id = ?", new String[]{String.valueOf(number+1)});
+        mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});
         Log.e("FullUpdate",tableToQuery+"-"+ number);
     }
 
@@ -312,8 +315,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         ContentValues cv = new ContentValues();
         cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,0);
-        //use number+1 to get the correct row in DB
-        mDb.update(tableToQuery,cv,"_id = ?", new String[]{String.valueOf(number+1)});
+        mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});
         Log.e("EmptyUpdate",tableToQuery+"-"+ number);
     }
 }

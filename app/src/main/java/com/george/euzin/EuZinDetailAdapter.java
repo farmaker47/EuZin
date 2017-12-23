@@ -67,7 +67,6 @@ public class EuZinDetailAdapter extends RecyclerView.Adapter<EuZinDetailAdapter.
             String text4 = mCursor.getString(mCursor.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_ENGLISH));
             holder.textPerigrafi.setText(text4);
         }
-
     }
 
     @Override
