@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +40,8 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
 
     private int numberOfIncoming;
 
+    private Cursor cursorForObservable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,15 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
         if (intent.hasExtra(mMain.NUMBER_OF_GRID)) {
             numberOfIncoming = intent.getIntExtra(mMain.NUMBER_OF_GRID, 0);
             Log.e("DetailActivity", String.valueOf(numberOfIncoming));
+        }
+
+        ActionBar ab = getSupportActionBar();
+        if(numberOfIncoming==17){
+            ab.setTitle(getResources().getString(R.string.favorites));
+        }else if(numberOfIncoming==1){
+            ab.setTitle(getResources().getString(R.string.vitamins));
+        }else if(numberOfIncoming==2){
+            ab.setTitle(getResources().getString(R.string.sunScreen));
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -86,6 +98,12 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        getSupportLoaderManager().restartLoader(MAIN_LOADER,null,this);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new AsyncTaskLoader<Cursor>(this) {
 
@@ -116,14 +134,14 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
 
                         Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);*/
 
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
+                        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(TABLE_TO_PASS, EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);
-                        editor.apply();
+                        editor.apply();*/
 
                         try {
 
-                            return getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN,null,null,null,null);
+                            return getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN, null, null, null, null);
 
                             /*Cursor cursor1 = getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN, null, null, null, null);
                             Cursor cursor2 = getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_VITAMIN, null, null, null, null);
@@ -159,10 +177,10 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
                                 null);
                         Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_VITAMIN);*/
 
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
+                        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(TABLE_TO_PASS, EuZinContract.DetailView.TABLE_NAME_VITAMIN);
-                        editor.apply();
+                        editor.apply();*/
 
                         try {
                             return getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_VITAMIN, null, null, null, null);
@@ -170,6 +188,24 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
                             e.printStackTrace();
                             return null;
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }else if (numberOfIncoming == 17) {
+                    try {
+                        Cursor cursor1 = getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN, null,"heart=?",new String[]{"1"}, null);
+                        Cursor cursor2 = getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_VITAMIN, null,"heart=?",new String[]{"1"}, null);
+
+                        Cursor mergedCursor = new MergeCursor(new Cursor[]{cursor1, cursor2});
+
+                        if (mergedCursor.getCount() < 0) {
+                            return null;
+                        }
+
+                        mergedCursor.moveToFirst();
+
+                        return mergedCursor;
                     } catch (Exception e) {
                         e.printStackTrace();
                         return null;
@@ -192,6 +228,7 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null) {
             mEuZinAdapter.setCursorData(data);
+            cursorForObservable = data;
         }
     }
 
@@ -203,9 +240,21 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
     @Override
     public void onListItemClick(int itemIndex) {
 
+        cursorForObservable.moveToPosition(itemIndex);
+
+        String tableToPass = cursorForObservable.getString(cursorForObservable.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_NAME_TABLE));
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(TABLE_TO_PASS, tableToPass);
+        editor.apply();
+
+        int absoluteNumber = cursorForObservable.getInt(cursorForObservable.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_ABSOLUTE_INDEX));
+
         Intent intent = new Intent(SunScreen.this, ObservableActivity.class);
-        intent.putExtra(NUMBER_OF_LIST, itemIndex);
+        intent.putExtra(NUMBER_OF_LIST, absoluteNumber);
         startActivity(intent);
 
     }
+
 }

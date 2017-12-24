@@ -47,6 +47,9 @@ public class EuZinContract {
         public  static final String DETAIL_VIEW_PERIGRAFI_ENGLISH = "toEnglishPerigrafi";
 
         public  static final String DETAIL_VIEW_HEART = "heart";
+
+        public  static final String DETAIL_VIEW_NAME_TABLE = "nameTable";
+        public  static final String DETAIL_VIEW_ABSOLUTE_INDEX = "absoluteIndex";
     }
 
 }

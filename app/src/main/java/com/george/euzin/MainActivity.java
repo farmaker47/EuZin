@@ -189,7 +189,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,EuZinFavorites.class);
+                /*Intent intent = new Intent(MainActivity.this,EuZinFavorites.class);
+                startActivity(intent);*/
+                Intent intent = new Intent(MainActivity.this, SunScreen.class);
+                intent.putExtra(NUMBER_OF_GRID, 17);
                 startActivity(intent);
             }
         });

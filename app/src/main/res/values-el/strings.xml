@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EuZin</string>
+    <string name="favorites">Αγαπημένα</string>
+    <string name="sunScreen">Αντιηλιακά</string>
+    <string name="vitamins">Βιταμίνες</string>
+</resources>

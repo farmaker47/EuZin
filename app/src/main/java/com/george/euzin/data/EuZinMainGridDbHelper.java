@@ -48,7 +48,9 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
                         EuZinContract.DetailView.DETAIL_VIEW_TITLE_ENGLISH + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_TEXT + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_ENGLISH + " TEXT NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_NAME_TABLE + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_HEART + " INTEGER NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_ABSOLUTE_INDEX + " INTEGER NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_IMAGE + " BLOB " +
                         ");";
         String DATABASE_CREATE_VITAMIN =
@@ -57,8 +59,10 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
                         EuZinContract.DetailView.DETAIL_VIEW_TITLE_TEXT + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_TITLE_ENGLISH + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_TEXT + " TEXT NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_NAME_TABLE + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_PERIGRAFI_ENGLISH + " TEXT NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_HEART + " INTEGER NOT NULL, " +
+                        EuZinContract.DetailView.DETAIL_VIEW_ABSOLUTE_INDEX + " INTEGER NOT NULL, " +
                         EuZinContract.DetailView.DETAIL_VIEW_IMAGE + " BLOB " +
                         ");";
 

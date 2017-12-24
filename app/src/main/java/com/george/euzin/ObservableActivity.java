@@ -37,7 +37,7 @@ import java.io.IOException;
 public class ObservableActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,ObservableScrollViewCallbacks {
 
     private SunScreen mSun;
-    private int number;
+    private int number,columnIDIndex;
     private ImageView imageO;
     private TextView textO,mTitleView;
     private static final String TABLE_TO_PASS = "table_pass";
@@ -208,7 +208,18 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        data.moveToPosition(number);
+
+        data.moveToFirst();
+
+        while (!data.isAfterLast()) {
+            if ( data.getInt(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_ABSOLUTE_INDEX))== number) {
+                columnIDIndex = data.getInt(data.getColumnIndex(EuZinContract.DetailView._ID));
+            }
+            data.moveToNext();
+        }
+
+
+        data.moveToPosition(columnIDIndex-1);
         String text = data.getString(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_TITLE_TEXT));
         textO.setText(text);
 
