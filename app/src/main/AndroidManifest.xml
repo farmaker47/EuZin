@@ -46,10 +46,6 @@
             android:authorities="com.george.euzin"
             android:exported="false" />
 
-        <activity
-            android:name=".EuZinFavorites"
-            android:label="@string/title_activity_eu_zin_favorites"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
