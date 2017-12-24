@@ -28,13 +28,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ObservableActivity"
-            android:theme="@style/AppTheme.Toolbar"></activity>
+            android:theme="@style/AppTheme.Toolbar" />
 
         <service
             android:name=".hilfe.EuZinService"
-            android:exported="false">
-
-        </service>
+            android:exported="false"></service>
         <service
             android:name=".hilfe.EuZinJobService"
             android:exported="false">
@@ -44,10 +42,14 @@
         </service>
 
         <provider
-            android:authorities="com.george.euzin"
             android:name=".data.EuZinContentProvider"
-            android:exported="false"/>
+            android:authorities="com.george.euzin"
+            android:exported="false" />
 
+        <activity
+            android:name=".EuZinFavorites"
+            android:label="@string/title_activity_eu_zin_favorites"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

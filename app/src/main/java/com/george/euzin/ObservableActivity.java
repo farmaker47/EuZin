@@ -328,6 +328,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         ContentValues cv = new ContentValues();
         cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,0);
+
         getContentResolver().update(EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).appendPath(rowForHeart).build(),cv,null,null);
         /*mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});*/
         Log.e("EmptyUpdate",tableToQuery+"-"+ rowForHeart);
