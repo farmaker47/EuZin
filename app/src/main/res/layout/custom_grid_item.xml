@@ -33,7 +33,6 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageCategories"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="@+id/imageCategories"
         app:layout_constraintRight_toRightOf="@+id/imageCategories"
         app:layout_constraintTop_toTopOf="@+id/imageCategories"

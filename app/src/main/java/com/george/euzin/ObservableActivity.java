@@ -269,7 +269,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         float flexibleRange = mFlexibleSpaceImageHeight - mActionBarSize;
         int minOverlayTransitionY = mActionBarSize - overlay.getHeight();
         ViewHelper.setTranslationY(overlay, ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
-        ViewHelper.setTranslationY(overlay, ScrollUtils.getFloat(-scrollY / 2, minOverlayTransitionY, 0));
+        ViewHelper.setTranslationY(imageO, ScrollUtils.getFloat(-scrollY / 2, minOverlayTransitionY, 0));
 
         ViewHelper.setAlpha(overlay, ScrollUtils.getFloat((float) scrollY / flexibleRange, 0, 1));
 
