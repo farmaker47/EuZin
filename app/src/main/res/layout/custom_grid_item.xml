@@ -29,13 +29,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/main_TextView_Title"
-        android:textColor="@color/icons"
+        android:textColor="@color/primary"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageCategories"
-        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="@+id/imageCategories"
         app:layout_constraintRight_toRightOf="@+id/imageCategories"
         app:layout_constraintTop_toTopOf="@+id/imageCategories"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        android:background="@color/icons"/>
 
 
 </android.support.constraint.ConstraintLayout>

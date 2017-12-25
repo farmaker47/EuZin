@@ -34,6 +34,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class ObservableActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,ObservableScrollViewCallbacks {
 
@@ -222,10 +223,16 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             data.moveToNext();
         }
 
-
         data.moveToPosition(columnIDIndex-1);
-        String text = data.getString(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_TITLE_TEXT));
-        textO.setText(text);
+
+        String locale = Locale.getDefault().getDisplayLanguage();
+        if (locale.equals("Ελληνικά")) {
+            String text = data.getString(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_TITLE_TEXT));
+            textO.setText(text);
+        }else{
+            String text2 = data.getString(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_TITLE_ENGLISH));
+            textO.setText(text2);
+        }
 
         byte[] image = data.getBlob(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_IMAGE));
         Bitmap bitmap = getImage(image);
