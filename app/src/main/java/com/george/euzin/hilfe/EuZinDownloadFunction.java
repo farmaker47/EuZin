@@ -25,7 +25,7 @@ public class EuZinDownloadFunction {
     private static final String DOWNLOAD_OF_RECEIVER = "downloading";
 
     public void downloadFromInternet(Context context){
-        String urlToUse = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/mainGrid.db?alt=media&token=68288ff7-523e-4bda-87bd-e2e73d7e491d";
+        String urlToUse = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/mainGrid.db?alt=media&token=cd00fc04-fa62-420b-aee8-9bb05d163d3d";
 
         InputStream input = null;
         OutputStream output = null;

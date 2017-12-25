@@ -22,6 +22,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -328,7 +329,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<Cursor>(this) {
+
+       return new CursorLoader(this,EuZinContract.MainGrid.CONTENT_URI_MAIN,null,null,null,null);
+
+        /*return new AsyncTaskLoader<Cursor>(this) {
 
             Cursor cursor;
 
@@ -351,7 +355,7 @@ public class MainActivity extends AppCompatActivity
                     e.printStackTrace();
                     return null;
                 }
-                /*try {
+                *//*try {
                     Cursor mCursor = mDb.query(EuZinContract.MainGrid.TABLE_NAME,
                             null,
                             null,
@@ -363,7 +367,7 @@ public class MainActivity extends AppCompatActivity
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
-                }*/
+                }*//*
             }
 
             @Override
@@ -371,7 +375,7 @@ public class MainActivity extends AppCompatActivity
                 cursor = data;
                 super.deliverResult(data);
             }
-        };
+        };*/
     }
 
     @Override

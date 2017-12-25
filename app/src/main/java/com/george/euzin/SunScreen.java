@@ -46,6 +46,7 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sun_screen);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -134,29 +135,10 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
 
                         Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);*/
 
-                        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(TABLE_TO_PASS, EuZinContract.DetailView.TABLE_NAME_SUNSCREEN);
-                        editor.apply();*/
-
                         try {
 
                             return getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN, null, null, null, null);
 
-                            /*Cursor cursor1 = getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN, null, null, null, null);
-                            Cursor cursor2 = getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_VITAMIN, null, null, null, null);
-
-                            Cursor mergedCursor = new MergeCursor(new Cursor[]{cursor1, cursor2});
-
-                            if (mergedCursor.getCount() < 0) {
-                                return null;
-                            }
-
-                            mergedCursor.moveToFirst();
-
-                            return mergedCursor;*/
-                            /*return getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN,null,null,null,null);*/
-                            /*return getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN,null,"heart=?",new String[]{"1"},null);*/
                         } catch (Exception e) {
                             e.printStackTrace();
                             return null;
@@ -176,11 +158,6 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
                                 null,
                                 null);
                         Log.e("AFTERquery",EuZinContract.DetailView.TABLE_NAME_VITAMIN);*/
-
-                        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SunScreen.this);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(TABLE_TO_PASS, EuZinContract.DetailView.TABLE_NAME_VITAMIN);
-                        editor.apply();*/
 
                         try {
                             return getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_VITAMIN, null, null, null, null);

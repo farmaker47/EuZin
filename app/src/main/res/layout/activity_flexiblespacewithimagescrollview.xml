@@ -7,8 +7,7 @@
         android:id="@+id/imageObservable"
         android:layout_width="match_parent"
         android:layout_height="@dimen/flexible_space_image_height"
-        android:scaleType="centerCrop"
-        android:src="@drawable/example" />
+        android:scaleType="centerCrop" />
 
     <View
         android:id="@+id/overlay"

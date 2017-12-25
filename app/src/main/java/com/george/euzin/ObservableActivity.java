@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -160,7 +161,10 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<Cursor>(this) {
+
+        return new CursorLoader(this,EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).build(),null,null,null,null);
+
+        /*return new AsyncTaskLoader<Cursor>(this) {
 
             Cursor cursor;
 
@@ -177,14 +181,14 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             @Override
             public Cursor loadInBackground() {
                 try {
-                    /*Cursor mCursor = mDb.query(tableToQuery,
+                    *//*Cursor mCursor = mDb.query(tableToQuery,
                             null,
                             null,
                             null,
                             null,
                             null,
                             null);
-                    return mCursor;*/
+                    return mCursor;*//*
 
                     try {
                         return getContentResolver().query(EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).build(),null,null,null,null);
@@ -203,7 +207,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
                 cursor = data;
                 super.deliverResult(data);
             }
-        };
+        };*/
     }
 
     @Override
