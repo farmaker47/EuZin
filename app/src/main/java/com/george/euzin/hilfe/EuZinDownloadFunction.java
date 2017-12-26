@@ -31,8 +31,6 @@ public class EuZinDownloadFunction {
         OutputStream output = null;
         HttpURLConnection connection = null;
 
-        /*String path = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + "/Recipe-DB";*/
         String path = EuZinContract.MainGrid.DB_PATH;
 
         File dir = new File(path);
@@ -59,7 +57,6 @@ public class EuZinDownloadFunction {
             input = connection.getInputStream();
 
             File fToPut = new File(dir, "mainGrid.db");
-            /*File fToPut = new File(dir, "3.jpeg");*/
 
             /// set Append to false if you want to overwrite
             output = new FileOutputStream(fToPut, false);
@@ -93,7 +90,6 @@ public class EuZinDownloadFunction {
             if (connection != null)
                 connection.disconnect();
         }
-        Log.e("DEMO","yew");
 
         Intent intent = new Intent();
         intent.setAction(NUMBER_OF_RECEIVER);

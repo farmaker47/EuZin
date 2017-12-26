@@ -32,7 +32,10 @@
 
         <service
             android:name=".hilfe.EuZinService"
-            android:exported="false"></service>
+            android:exported="false">
+
+        </service>
+
         <service
             android:name=".hilfe.EuZinJobService"
             android:exported="false">
@@ -47,5 +50,4 @@
             android:exported="false" />
 
     </application>
-
 </manifest>

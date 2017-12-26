@@ -1,9 +1,9 @@
 package com.george.euzin;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -42,9 +41,8 @@ import com.george.euzin.data.EuZinMainGridDbHelper;
 import com.george.euzin.hilfe.EuZinJobDispatcher;
 import com.george.euzin.hilfe.EuZinService;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     private static final int NOTIFICATION_ID = 4000;
 
     private static final int DATABASE_LOADER = 42;
-    private static final String URL_TO_DOWNLOAD = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/rrecip.jpg?alt=media&token=e093fbe1-a4c9-4f7b-b6fa-eb262221607d";
+    private static final String URL_TO_DOWNLOAD = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/tensa.png?alt=media&token=b8fe2ed8-3c7b-4f0c-8172-a5eff02767f9";
     public static final String URL_KEY = "urlKey";
 
     private BroadcastReceiver mBroadcastReceiver;
@@ -99,7 +97,6 @@ public class MainActivity extends AppCompatActivity
 
                     String path = Environment.getExternalStorageDirectory()
                             .getAbsolutePath() + "/Recipe-DB";
-                    /*String path = EuZinContract.MainGrid.DB_PATH;*/
 
                     File dir = new File(path);
                     if (!dir.exists())
@@ -125,7 +122,7 @@ public class MainActivity extends AppCompatActivity
                         input = connection.getInputStream();
 
                         /*File fToPut = new File(dir, "mainGrid.db");*/
-                        File fToPut = new File(dir, "2.jpeg");
+                        File fToPut = new File(dir, "2.png");
 
                         /// set Append to false if you want to overwrite
                         output = new FileOutputStream(fToPut, false);
@@ -145,6 +142,22 @@ public class MainActivity extends AppCompatActivity
                             publishProgress((int) (total * 100 / fileLength));*/
                             output.write(data, 0, count);
                         }
+
+                        String pathOfImage = Environment.getExternalStorageDirectory()
+                                .getAbsolutePath() + "/Recipe-DB/2.png";
+                        File bitmapToDecode = new File(pathOfImage);
+                        if (bitmapToDecode.exists()) {
+                            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                            Bitmap bitmapReady = BitmapFactory.decodeFile(bitmapToDecode.getAbsolutePath(), bmOptions);
+
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            bitmapReady.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            byte[] byteArray = stream.toByteArray();
+
+                            replaceFourthIcon(byteArray);
+                        }
+
+
                     } catch (Exception e) {
                         return e.toString();
                     } finally {
@@ -190,8 +203,6 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent intent = new Intent(MainActivity.this,EuZinFavorites.class);
-                startActivity(intent);*/
                 Intent intent = new Intent(MainActivity.this, SunScreen.class);
                 intent.putExtra(NUMBER_OF_GRID, 17);
                 startActivity(intent);
@@ -221,7 +232,6 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setHasFixedSize(true);
 
         //setting Context and column number for grid
-        mGridLayoutManager = new GridLayoutManager(this, 2);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mGridLayoutManager = new GridLayoutManager(this, 2);
         } else {
@@ -330,7 +340,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public Loader<Cursor> onCreateLoader(int id, final Bundle args) {
 
-       return new CursorLoader(this,EuZinContract.MainGrid.CONTENT_URI_MAIN,null,null,null,null);
+        return new CursorLoader(this, EuZinContract.MainGrid.CONTENT_URI_MAIN, null, null, null, null);
 
         /*return new AsyncTaskLoader<Cursor>(this) {
 
@@ -404,15 +414,12 @@ public class MainActivity extends AppCompatActivity
         queryBundle.putString(URL_KEY, URL_TO_DOWNLOAD);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        // COMPLETED (22) Get our Loader by calling getLoader and passing the ID we specified
         Loader<String> githubSearchLoader = loaderManager.getLoader(DATABASE_LOADER);
-        // COMPLETED (23) If the Loader was null, initialize it. Else, restart it.
         if (githubSearchLoader == null) {
             loaderManager.initLoader(DATABASE_LOADER, queryBundle, mLoaderCallBackString);
         } else {
             loaderManager.restartLoader(DATABASE_LOADER, queryBundle, mLoaderCallBackString);
         }
-
     }
 
     public class EuZinBroadcast extends BroadcastReceiver {
@@ -423,25 +430,22 @@ public class MainActivity extends AppCompatActivity
             if (action.equals(NUMBER_OF_RECEIVER)) {
                 getSupportLoaderManager().restartLoader(MAIN_LOADER, null, MainActivity.this);
                 Log.e("MainBroadcast", "Restarted");
-            }else if(action.equals(DOWNLOAD_OF_RECEIVER)){
+            } else if (action.equals(DOWNLOAD_OF_RECEIVER)) {
                 downloadFromFirebase();
                 Log.e("MainBroadcast", "Picture Downoaded");
             }
         }
     }
 
-    private void EuZinNotification(){
-
-        /*Bitmap largeIcon = BitmapFactory.decodeResource(
-                getResources(),R.drawable.heart_out);*/
+    private void EuZinNotification() {
 
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/2.jpeg";
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = BitmapFactory.decodeFile(path,options); //This gets the image
+        Bitmap bitmap = BitmapFactory.decodeFile(path, options); //This gets the image
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setColor(ContextCompat.getColor(this,R.color.colorPrimary))
+                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setLargeIcon(bitmap)
                 .setSmallIcon(R.drawable.heart_in)
                 .setContentTitle("Notification")
@@ -463,4 +467,13 @@ public class MainActivity extends AppCompatActivity
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
 
     }
+
+    private void replaceFourthIcon(byte[] byteToPass) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(EuZinContract.MainGrid.GRID_IMAGE, byteToPass);
+        getContentResolver().update(EuZinContract.MainGrid.CONTENT_URI_MAIN.buildUpon().appendPath("4").build(), cv, null, null);
+
+    }
+
 }

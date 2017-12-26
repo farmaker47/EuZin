@@ -63,20 +63,20 @@ public class EuZinContentProvider extends ContentProvider {
         switch (match) {
 
             case MAIN_GRID:
-                retCursor = sqLiteDatabase.query(EuZinContract.MainGrid.TABLE_NAME,strings,s,strings1,null,null,s1);
+                retCursor = sqLiteDatabase.query(EuZinContract.MainGrid.TABLE_NAME, strings, s, strings1, null, null, s1);
                 break;
             case DETAILS_VITAMIN:
-                retCursor = sqLiteDatabase.query(EuZinContract.DetailView.TABLE_NAME_VITAMIN,strings,s,strings1,null,null,s1);
+                retCursor = sqLiteDatabase.query(EuZinContract.DetailView.TABLE_NAME_VITAMIN, strings, s, strings1, null, null, s1);
                 break;
             case DETAILS_SUNSCREEN:
-                retCursor = sqLiteDatabase.query(EuZinContract.DetailView.TABLE_NAME_SUNSCREEN,strings,s,strings1,null,null,s1);
+                retCursor = sqLiteDatabase.query(EuZinContract.DetailView.TABLE_NAME_SUNSCREEN, strings, s, strings1, null, null, s1);
                 break;
             default:
                 throw new UnsupportedOperationException("Uknown " + uri);
 
         }
 
-        retCursor.setNotificationUri(getContext().getContentResolver(),uri);
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return retCursor;
     }
@@ -107,18 +107,24 @@ public class EuZinContentProvider extends ContentProvider {
 
         int match = sUriMatcher.match(uri);
 
-        switch (match){
+        switch (match) {
             case DETAILS_VITAMIN_ID:
 
                 String id = uri.getPathSegments().get(1);
 
-                tasksUpdated= sqLiteDatabase.update(EuZinContract.DetailView.TABLE_NAME_VITAMIN,contentValues,"_id=?",new String[]{id});
+                tasksUpdated = sqLiteDatabase.update(EuZinContract.DetailView.TABLE_NAME_VITAMIN, contentValues, "_id=?", new String[]{id});
 
                 break;
             case DETAILS_SUNSCREEN_ID:
                 String id2 = uri.getPathSegments().get(1);
 
-                tasksUpdated= sqLiteDatabase.update(EuZinContract.DetailView.TABLE_NAME_SUNSCREEN,contentValues,"_id=?",new String[]{id2});
+                tasksUpdated = sqLiteDatabase.update(EuZinContract.DetailView.TABLE_NAME_SUNSCREEN, contentValues, "_id=?", new String[]{id2});
+
+                break;
+            case MAIN_GRID_ID:
+                String id3 = uri.getPathSegments().get(1);
+
+                tasksUpdated = sqLiteDatabase.update(EuZinContract.MainGrid.TABLE_NAME, contentValues, "_id=?", new String[]{id3});
 
                 break;
             default:

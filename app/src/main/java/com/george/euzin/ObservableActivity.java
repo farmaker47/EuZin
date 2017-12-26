@@ -355,4 +355,6 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         /*mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});*/
         Log.e("EmptyUpdate",tableToQuery+"-"+ rowForHeart);
     }
+
+
 }

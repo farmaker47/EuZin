@@ -53,7 +53,7 @@ public class EuZinJobDispatcher {
                  * which the data should be synced. Please note that this end time is not
                  * guaranteed, but is more of a guideline for FirebaseJobDispatcher to go off of.
                  */
-                .setTrigger(Trigger.executionWindow(1, 2))
+                .setTrigger(Trigger.executionWindow(4, 7))
                 /*
                  * If a Job with the tag with provided already exists, this new job will replace
                  * the old one.
