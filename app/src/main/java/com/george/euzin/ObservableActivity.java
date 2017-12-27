@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
@@ -37,19 +36,19 @@ import com.nineoldandroids.view.ViewPropertyAnimator;
 import java.io.IOException;
 import java.util.Locale;
 
-public class ObservableActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,ObservableScrollViewCallbacks {
+public class ObservableActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, ObservableScrollViewCallbacks {
 
     private SunScreen mSun;
-    private int number,columnIDIndex;
+    private int number, columnIDIndex;
     private ImageView imageO;
-    private TextView textO,mTitleView;
+    private TextView textO, mTitleView;
     private static final String TABLE_TO_PASS = "table_pass";
     private String tableToQuery;
     private static final int MAIN_LOADER = 74;
     private View overlay;
     private ObservableScrollView oScrollView;
     private FloatingActionButton fab;
-    private int mFlexibleSpaceImageHeight,mFlexibleSpaceShowFabOffset,mFabMargin,mActionBarSize,actionBarHeight;
+    private int mFlexibleSpaceImageHeight, mFlexibleSpaceShowFabOffset, mFabMargin, mActionBarSize, actionBarHeight;
     private ActionBar ab;
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private SQLiteDatabase mDb;
@@ -75,9 +74,9 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         imageO = (ImageView) findViewById(R.id.imageObservable);
         textO = (TextView) findViewById(R.id.titleText);
-        overlay= findViewById(R.id.overlay);
-        fab = (FloatingActionButton)findViewById(R.id.fab);
-        mTitleView = (TextView)findViewById(R.id.titleText);
+        overlay = findViewById(R.id.overlay);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        mTitleView = (TextView) findViewById(R.id.titleText);
 
         //Animation helper methods
         ViewHelper.setScaleX(fab, 0);
@@ -87,13 +86,12 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
         TypedValue tv = new TypedValue();
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-        {
-            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
         }
         mActionBarSize = actionBarHeight;
 
-        oScrollView = (ObservableScrollView)findViewById(R.id.oScroll);
+        oScrollView = (ObservableScrollView) findViewById(R.id.oScroll);
         oScrollView.setScrollViewCallbacks(this);
 
         ScrollUtils.addOnGlobalLayoutListener(oScrollView, new Runnable() {
@@ -120,22 +118,21 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
                 //Trying to define if FAB button has a specific image so upon clicked it can be changed
                 ImageView imageView = (ImageView) view;
-                assert(R.id.imageObservable == imageView.getId());
+                assert (R.id.imageObservable == imageView.getId());
 
                 // See here
                 Integer integer = (Integer) imageView.getTag();
                 integer = integer == null ? 0 : integer;
 
-                switch(integer) {
+                switch (integer) {
                     case R.drawable.heart_in:
                         imageView.setImageResource(R.drawable.heart_out);
                         imageView.setTag(R.drawable.heart_out);
 
                         //Execute that method
                         makeHeartEmpty();
-                        Log.e("OnClick","Out");
-                        Toast.makeText(ObservableActivity.this,getResources().getString(R.string.addedInFavorites),Toast.LENGTH_LONG);
-
+                        Log.e("OnClick", "Out");
+                        Toast.makeText(ObservableActivity.this, getResources().getString(R.string.removedFromFavorites), Toast.LENGTH_LONG).show();
                         break;
                     case R.drawable.heart_out:
                     default:
@@ -144,8 +141,8 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
                         //Execute that method
                         makeHeartFull();
-                        Log.e("OnClick","In");
-                        Toast.makeText(ObservableActivity.this,getResources().getString(R.string.removedFromFavorites),Toast.LENGTH_LONG);
+                        Log.e("OnClick", "In");
+                        Toast.makeText(ObservableActivity.this, getResources().getString(R.string.addedInFavorites), Toast.LENGTH_LONG).show();
 
                         break;
                 }
@@ -161,17 +158,16 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         mDb = dbHelper.getWritableDatabase();
 
-        getSupportLoaderManager().initLoader(MAIN_LOADER,null,this);
+        getSupportLoaderManager().initLoader(MAIN_LOADER, null, this);
 
     }
-
 
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         //Use a cursor loader because we want to fetch data from DB
-        return new CursorLoader(this,EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).build(),null,null,null,null);
+        return new CursorLoader(this, EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).build(), null, null, null, null);
 
         /*return new AsyncTaskLoader<Cursor>(this) {
 
@@ -226,21 +222,21 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         //trying to find the specific ID index depend on the value at a specific column
         while (!data.isAfterLast()) {
-            if ( data.getInt(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_ABSOLUTE_INDEX))== number) {
+            if (data.getInt(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_ABSOLUTE_INDEX)) == number) {
                 columnIDIndex = data.getInt(data.getColumnIndex(EuZinContract.DetailView._ID));
             }
             data.moveToNext();
         }
 
         //moving the cursor at the spesific position so we can fetch right data
-        data.moveToPosition(columnIDIndex-1);
+        data.moveToPosition(columnIDIndex - 1);
 
         //Find what language we are using to load specific text
         String locale = Locale.getDefault().getDisplayLanguage();
         if (locale.equals("Ελληνικά")) {
             String text = data.getString(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_TITLE_TEXT));
             textO.setText(text);
-        }else{
+        } else {
             String text2 = data.getString(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_TITLE_ENGLISH));
             textO.setText(text2);
         }
@@ -252,19 +248,18 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         //Depend on number 0 or 1 the FAB button takes specific image
         int heartNumber = data.getInt(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_HEART));
-        if(heartNumber==0){
+        if (heartNumber == 0) {
             fab.setImageResource(R.drawable.heart_out);
-            Log.e("HeartOut","Done");
-        }else if(heartNumber==1){
+            Log.e("HeartOut", "Done");
+        } else if (heartNumber == 1) {
             fab.setImageResource(R.drawable.heart_in);
-            Log.e("HeartIn","DoneDoneeeeee");
+            Log.e("HeartIn", "DoneDoneeeeee");
         }
 
         //getting the row id for use in Update function
         int rowId = data.getInt(data.getColumnIndex(EuZinContract.DetailView._ID));
         rowForHeart = String.valueOf(rowId);
 
-        data.close();
     }
 
     @Override
@@ -352,25 +347,25 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
     }
 
     //When FAB button is clicked make heart full and update DB
-    private void makeHeartFull(){
+    private void makeHeartFull() {
 
         ContentValues cv = new ContentValues();
-        cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,1);
+        cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART, 1);
 
-        getContentResolver().update(EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).appendPath(rowForHeart).build(),cv,null,null);
+        getContentResolver().update(EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).appendPath(rowForHeart).build(), cv, null, null);
 
         /*mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});*/
-        Log.e("FullUpdate",tableToQuery+"-"+ rowForHeart);
+        Log.e("FullUpdate", tableToQuery + "-" + rowForHeart);
     }
 
     //When FAB button is clicked make heart empty and update DB
-    private void makeHeartEmpty(){
+    private void makeHeartEmpty() {
 
         ContentValues cv = new ContentValues();
-        cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART,0);
+        cv.put(EuZinContract.DetailView.DETAIL_VIEW_HEART, 0);
 
-        getContentResolver().update(EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).appendPath(rowForHeart).build(),cv,null,null);
+        getContentResolver().update(EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).appendPath(rowForHeart).build(), cv, null, null);
         /*mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});*/
-        Log.e("EmptyUpdate",tableToQuery+"-"+ rowForHeart);
+        Log.e("EmptyUpdate", tableToQuery + "-" + rowForHeart);
     }
 }

@@ -25,6 +25,7 @@
         <activity
             android:name=".SunScreen"
             android:label="@string/title_activity_sun_screen"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ObservableActivity"

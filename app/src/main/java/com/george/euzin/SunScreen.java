@@ -64,6 +64,7 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
         }else if(numberOfIncoming==2){
             ab.setTitle(getResources().getString(R.string.sunScreen));
         }
+        ab.setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
