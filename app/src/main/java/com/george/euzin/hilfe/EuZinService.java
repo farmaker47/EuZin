@@ -27,6 +27,7 @@ public class EuZinService extends IntentService {
         super("EuZinService");
     }
 
+    //This serviceis to download whole fresh DB
     @Override
     protected void onHandleIntent(Intent intent) {
         mEuZinDownload.downloadFromInternet(this);

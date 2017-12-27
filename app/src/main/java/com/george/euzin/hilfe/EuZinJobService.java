@@ -24,6 +24,7 @@ public class EuZinJobService extends JobService {
             protected Void doInBackground(Void... voids) {
                 Context context = getApplicationContext();
 
+                //Execute this method to download picture
                 mEuZinDownload.sendIntentToDownloadPicture(context);
 
                 jobFinished(jobParameters, false);

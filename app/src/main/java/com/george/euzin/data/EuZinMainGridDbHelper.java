@@ -24,6 +24,8 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
 
         this.mContext = context;
+
+        //Checking if database exists in folder and either creates it or opens it
         boolean dbexist = checkdatabase();
         if (dbexist) {
             opendatabase();
@@ -66,6 +68,7 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
                         EuZinContract.DetailView.DETAIL_VIEW_IMAGE + " BLOB " +
                         ");";
 
+        //Executing the method 3 times for the 3 tables
         sqLiteDatabase.execSQL(DATABASE_CREATE_MAIN);
         sqLiteDatabase.execSQL(DATABASE_CREATE_DETAIL);
         sqLiteDatabase.execSQL(DATABASE_CREATE_VITAMIN);
@@ -137,5 +140,4 @@ public class EuZinMainGridDbHelper extends SQLiteOpenHelper {
         myoutput.close();
         myinput.close();
     }
-
 }

@@ -72,9 +72,11 @@ public class MainActivity extends AppCompatActivity
     private BroadcastReceiver mBroadcastReceiver;
     private IntentFilter mFilter;
 
+    //2nd loader insted of implementing in the beggining you instantate like below
     private android.support.v4.app.LoaderManager.LoaderCallbacks mLoaderCallBackString = new LoaderManager.LoaderCallbacks() {
         @Override
         public Loader onCreateLoader(int id, final Bundle args) {
+            //Because it is not used for fetching data from DB,we use an AsyncTask Loader
             return new AsyncTaskLoader<String>(MainActivity.this) {
 
                 @Override
@@ -143,6 +145,7 @@ public class MainActivity extends AppCompatActivity
                             output.write(data, 0, count);
                         }
 
+                        //We get the already downloaded image
                         String pathOfImage = Environment.getExternalStorageDirectory()
                                 .getAbsolutePath() + "/Recipe-DB/2.png";
                         File bitmapToDecode = new File(pathOfImage);
@@ -150,10 +153,12 @@ public class MainActivity extends AppCompatActivity
                             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
                             Bitmap bitmapReady = BitmapFactory.decodeFile(bitmapToDecode.getAbsolutePath(), bmOptions);
 
+                            //we make the image to byte array
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
                             bitmapReady.compress(Bitmap.CompressFormat.PNG, 100, stream);
                             byte[] byteArray = stream.toByteArray();
 
+                            //we execute the method passing the array
                             replaceFourthIcon(byteArray);
                         }
 
@@ -251,8 +256,8 @@ public class MainActivity extends AppCompatActivity
         mFilter.addAction(NUMBER_OF_RECEIVER);
         mFilter.addAction(DOWNLOAD_OF_RECEIVER);
 
+        //Instantiate the Job
         EuZinJobDispatcher.scheduleFirebaseJobDispatcherSync(this);
-
     }
 
     @Override
@@ -340,6 +345,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public Loader<Cursor> onCreateLoader(int id, final Bundle args) {
 
+        //Use a cursor loader for fetching data from DB
         return new CursorLoader(this, EuZinContract.MainGrid.CONTENT_URI_MAIN, null, null, null, null);
 
         /*return new AsyncTaskLoader<Cursor>(this) {
@@ -409,6 +415,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //Methodthat initializes or restart 2nd loader
     private void downloadFromFirebase() {
         Bundle queryBundle = new Bundle();
         queryBundle.putString(URL_KEY, URL_TO_DOWNLOAD);
@@ -422,6 +429,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //Broadcast receiver that gets the broadcast when downloads are finished
     public class EuZinBroadcast extends BroadcastReceiver {
 
         @Override
@@ -437,6 +445,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //Notification is created after download
     private void EuZinNotification() {
 
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/2.jpeg";
@@ -468,6 +477,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //When new icon is downloaded then this icon is passed at a specific place in DB
     private void replaceFourthIcon(byte[] byteToPass) {
 
         ContentValues cv = new ContentValues();

@@ -14,6 +14,7 @@ import java.io.IOException;
 
 public class EuZinContentProvider extends ContentProvider {
 
+    //to use with Urimatcher when tries to match the Uri. Using 3 integers for tables and 3 for specific table's id
     public static final int MAIN_GRID = 100;
     public static final int MAIN_GRID_ID = 101;
     public static final int DETAILS_VITAMIN = 200;
@@ -50,6 +51,7 @@ public class EuZinContentProvider extends ContentProvider {
         return true;
     }
 
+    //building that method for quering the 3 tables of the database
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
@@ -87,17 +89,21 @@ public class EuZinContentProvider extends ContentProvider {
         return null;
     }
 
+
+    //not implemented because it is not needed
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         return null;
     }
 
+    //not implemented because it is not needed
     @Override
     public int delete(Uri uri, String s, String[] strings) {
         return 0;
     }
 
+    //update values at specific id at the3 tables
     @Override
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
 

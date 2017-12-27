@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 
 public class EuZinContract {
 
+    //Creating the different types of Uri for use with the provider
     public static final String AUTHORITY = "com.george.euzin";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String PATH_TABLE_SUNSCREEN = "detailTable";
@@ -17,6 +18,7 @@ public class EuZinContract {
 
     public static final class MainGrid implements BaseColumns {
 
+        //Uri for the Main grid table
         public static final Uri CONTENT_URI_MAIN = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TABLE_MAIN).build();
 
         public static final String TABLE_NAME = "gridTable";
@@ -31,6 +33,7 @@ public class EuZinContract {
 
     public static final class DetailView implements BaseColumns {
 
+        //Uri for Vitamins and Sunscreen table
         public static final Uri CONTENT_URI_SUNSCREEN = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TABLE_SUNSCREEN).build();
         public static final Uri CONTENT_URI_VITAMIN = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TABLE_VITAMIN).build();
 

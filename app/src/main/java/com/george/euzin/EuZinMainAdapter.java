@@ -49,6 +49,7 @@ public class EuZinMainAdapter extends RecyclerView.Adapter<EuZinMainAdapter.Main
             return;
         }
 
+        //Get image from database
         byte[] image = mCursor.getBlob(mCursor.getColumnIndex(EuZinContract.MainGrid.GRID_IMAGE));
         Bitmap bitmap = getImage(image);
         holder.imageCategories.setImageBitmap(bitmap);
@@ -56,6 +57,7 @@ public class EuZinMainAdapter extends RecyclerView.Adapter<EuZinMainAdapter.Main
         String locale = Locale.getDefault().getDisplayLanguage();
         Log.e("Adapter", locale);
 
+        //Check if phone is in Greek language
         if (locale.equals("Ελληνικά")) {
             String text = mCursor.getString(mCursor.getColumnIndex(EuZinContract.MainGrid.GRID_TEXT));
             holder.categoriesTextView.setText(text);

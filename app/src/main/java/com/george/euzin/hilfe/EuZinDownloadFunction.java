@@ -15,15 +15,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by farmaker1 on 19/12/2017.
- */
-
 public class EuZinDownloadFunction {
 
     private static final String NUMBER_OF_RECEIVER = "updating";
     private static final String DOWNLOAD_OF_RECEIVER = "downloading";
 
+    //Method for downloading a FRESH database from internet so it can be overwritten
     public void downloadFromInternet(Context context){
         String urlToUse = "https://firebasestorage.googleapis.com/v0/b/snow-1557b.appspot.com/o/mainGrid.db?alt=media&token=cd00fc04-fa62-420b-aee8-9bb05d163d3d";
 
@@ -31,6 +28,7 @@ public class EuZinDownloadFunction {
         OutputStream output = null;
         HttpURLConnection connection = null;
 
+        //the path where DB already exists
         String path = EuZinContract.MainGrid.DB_PATH;
 
         File dir = new File(path);
@@ -91,12 +89,14 @@ public class EuZinDownloadFunction {
                 connection.disconnect();
         }
 
+        //When downloading is finished a broadcast is sent to the broadcast receiver in Main Actvity
         Intent intent = new Intent();
         intent.setAction(NUMBER_OF_RECEIVER);
         context.sendBroadcast(intent);
 
     }
 
+    //Other method that sends broadcast to broadcast receiver in MainActivity, ths is used when new picture is downloaded
     public void sendIntentToDownloadPicture(Context context){
         Intent intent = new Intent();
         intent.setAction(DOWNLOAD_OF_RECEIVER);

@@ -78,6 +78,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         fab = (FloatingActionButton)findViewById(R.id.fab);
         mTitleView = (TextView)findViewById(R.id.titleText);
 
+        //Animation helper methods
         ViewHelper.setScaleX(fab, 0);
         ViewHelper.setScaleY(fab, 0);
         ab = getSupportActionBar();
@@ -116,6 +117,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             @Override
             public void onClick(View view) {
 
+                //Trying to define if FAB button has a specific image so upon clicked it can be changed
                 ImageView imageView = (ImageView) view;
                 assert(R.id.imageObservable == imageView.getId());
 
@@ -128,6 +130,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
                         imageView.setImageResource(R.drawable.heart_out);
                         imageView.setTag(R.drawable.heart_out);
 
+                        //Execute that method
                         makeHeartEmpty();
                         Log.e("OnClick","Out");
 
@@ -137,6 +140,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
                         imageView.setImageResource(R.drawable.heart_in);
                         imageView.setTag(R.drawable.heart_in);
 
+                        //Execute that method
                         makeHeartFull();
                         Log.e("OnClick","In");
 
@@ -163,6 +167,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        //Use a cursor loader because we want to fetch data from DB
         return new CursorLoader(this,EuZinContract.BASE_CONTENT_URI.buildUpon().appendPath(tableToQuery).build(),null,null,null,null);
 
         /*return new AsyncTaskLoader<Cursor>(this) {
@@ -216,6 +221,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
         data.moveToFirst();
 
+        //trying to find the specific ID index depend on the value at a specific column
         while (!data.isAfterLast()) {
             if ( data.getInt(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_ABSOLUTE_INDEX))== number) {
                 columnIDIndex = data.getInt(data.getColumnIndex(EuZinContract.DetailView._ID));
@@ -223,8 +229,10 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             data.moveToNext();
         }
 
+        //moving the cursor at the spesific position so we can fetch right data
         data.moveToPosition(columnIDIndex-1);
 
+        //Find what language we are using to load specific text
         String locale = Locale.getDefault().getDisplayLanguage();
         if (locale.equals("Ελληνικά")) {
             String text = data.getString(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_TITLE_TEXT));
@@ -234,10 +242,12 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
             textO.setText(text2);
         }
 
+        //fetching image from DB
         byte[] image = data.getBlob(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_IMAGE));
         Bitmap bitmap = getImage(image);
         imageO.setImageBitmap(bitmap);
 
+        //Depend on number 0 or 1 the FAB button takes specific image
         int heartNumber = data.getInt(data.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_HEART));
         if(heartNumber==0){
             fab.setImageResource(R.drawable.heart_out);
@@ -264,6 +274,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
+    //Helper animation methods(Check libraries at Dependencies)
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
         float flexibleRange = mFlexibleSpaceImageHeight - mActionBarSize;
@@ -319,6 +330,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
 
     private boolean mFabIsShown;
 
+    //Annimation methods
     private void showFab() {
         if (!mFabIsShown) {
             ViewPropertyAnimator.animate(fab).cancel();
@@ -327,6 +339,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         }
     }
 
+    //Animation methods
     private void hideFab() {
         if (mFabIsShown) {
             ViewPropertyAnimator.animate(fab).cancel();
@@ -335,6 +348,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         }
     }
 
+    //When FAB button is clicked make heart full and update DB
     private void makeHeartFull(){
 
         ContentValues cv = new ContentValues();
@@ -346,6 +360,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         Log.e("FullUpdate",tableToQuery+"-"+ rowForHeart);
     }
 
+    //When FAB button is clicked make heart empty and update DB
     private void makeHeartEmpty(){
 
         ContentValues cv = new ContentValues();
@@ -355,6 +370,4 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
         /*mDb.update(tableToQuery,cv,"_id = ?", new String[]{rowForHeart});*/
         Log.e("EmptyUpdate",tableToQuery+"-"+ rowForHeart);
     }
-
-
 }

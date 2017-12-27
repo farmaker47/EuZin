@@ -47,6 +47,7 @@ public class EuZinDetailAdapter extends RecyclerView.Adapter<EuZinDetailAdapter.
             return;
         }
 
+        //This is how we get image from Sqlite database in the form of byte array
         byte[] image = mCursor.getBlob(mCursor.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_IMAGE));
         Bitmap bitmap = getImage(image);
         holder.image.setImageBitmap(bitmap);
@@ -54,6 +55,7 @@ public class EuZinDetailAdapter extends RecyclerView.Adapter<EuZinDetailAdapter.
         String locale = Locale.getDefault().getDisplayLanguage();
         Log.e("Adapter", locale);
 
+        //Check if phone is in Greek or any other language
         if (locale.equals("Ελληνικά")) {
             String text = mCursor.getString(mCursor.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_TITLE_TEXT));
             holder.textTitle.setText(text);

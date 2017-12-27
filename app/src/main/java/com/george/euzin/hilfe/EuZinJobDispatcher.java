@@ -19,14 +19,14 @@ public class EuZinJobDispatcher {
 
     private static final String EUZIN_SYNC_TAG = "sunshine-sync";
 
+    //JobDispatcher..creates job and alla attributes
     synchronized  public  static void scheduleFirebaseJobDispatcherSync(@NonNull final Context context) {
 
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
-        /* Create the Job to periodically sync Sunshine */
         Job syncSunshineJob = dispatcher.newJobBuilder()
-                /* The Service that will be used to sync Sunshine's data */
+                /* The Service that will be used to download picture data */
                 .setService(EuZinJobService.class)
                 /* Set the UNIQUE tag used to identify this Job */
                 .setTag(EUZIN_SYNC_TAG)
@@ -42,12 +42,9 @@ public class EuZinJobDispatcher {
                  * Job "forever" or to have it die the next time the device boots up.
                  */
                 .setLifetime(Lifetime.FOREVER)
-                /*
-                 * We want Sunshine's weather data to stay up to date, so we tell this Job to recur.
-                 */
                 .setRecurring(true)
                 /*
-                 * We want the weather data to be synced every 3 to 4 hours. The first argument for
+                 * We want the method to trigger between 4 to 7 minutes. The first argument for
                  * Trigger's static executionWindow method is the start of the time frame when the
                  * sync should be performed. The second argument is the latest point in time at
                  * which the data should be synced. Please note that this end time is not

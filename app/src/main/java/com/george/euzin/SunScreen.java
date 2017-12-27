@@ -170,6 +170,8 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
                         return null;
                     }
                 }else if (numberOfIncoming == 17) {
+
+                    //Used a Merged cursor to fetch data from 2 tables
                     try {
                         Cursor cursor1 = getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_SUNSCREEN, null,"heart=?",new String[]{"1"}, null);
                         Cursor cursor2 = getContentResolver().query(EuZinContract.DetailView.CONTENT_URI_VITAMIN, null,"heart=?",new String[]{"1"}, null);
@@ -217,6 +219,7 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
     @Override
     public void onListItemClick(int itemIndex) {
 
+        //passing the table name and special index number to next activity
         cursorForObservable.moveToPosition(itemIndex);
 
         String tableToPass = cursorForObservable.getString(cursorForObservable.getColumnIndex(EuZinContract.DetailView.DETAIL_VIEW_NAME_TABLE));
