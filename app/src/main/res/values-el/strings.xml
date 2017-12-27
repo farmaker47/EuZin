@@ -4,4 +4,6 @@
     <string name="favorites">Αγαπημένα</string>
     <string name="sunScreen">Αντιηλιακά</string>
     <string name="vitamins">Βιταμίνες</string>
+    <string name="removedFromFavorites">Το προιόν αφαιρέθηκε απο τα αγαπημένα</string>
+    <string name="addedInFavorites">Το προιόν προστέθηκε στα αγαπημένα</string>
 </resources>

@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.george.euzin.data.EuZinContract;
 import com.george.euzin.data.EuZinMainGridDbHelper;
@@ -133,6 +134,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
                         //Execute that method
                         makeHeartEmpty();
                         Log.e("OnClick","Out");
+                        Toast.makeText(ObservableActivity.this,getResources().getString(R.string.addedInFavorites),Toast.LENGTH_LONG);
 
                         break;
                     case R.drawable.heart_out:
@@ -143,6 +145,7 @@ public class ObservableActivity extends AppCompatActivity implements LoaderManag
                         //Execute that method
                         makeHeartFull();
                         Log.e("OnClick","In");
+                        Toast.makeText(ObservableActivity.this,getResources().getString(R.string.removedFromFavorites),Toast.LENGTH_LONG);
 
                         break;
                 }

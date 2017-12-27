@@ -101,7 +101,6 @@ public class SunScreen extends AppCompatActivity implements LoaderManager.Loader
     @Override
     protected void onResume() {
         super.onResume();
-        getSupportLoaderManager().restartLoader(MAIN_LOADER,null,this);
     }
 
     @Override
